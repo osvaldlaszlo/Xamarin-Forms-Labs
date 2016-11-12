@@ -20,6 +20,8 @@
 // 
 
 using System.ComponentModel;
+using CoreGraphics;
+using UIKit;
 using XLabs.Platform.Extensions;
 using XLabs.Platform.Services;
 
@@ -194,9 +196,19 @@ namespace XLabs.Platform.Device
             int height;
             if (UIKit.UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
             {
-                CoreGraphics.CGRect bounds = UIKit.UIScreen.MainScreen.NativeBounds;
-                width = (int)bounds.Width;
-                height = (int)bounds.Height;
+                // MainScreen.CurrentMode will reflect zoom mode on iOS8+
+                CGSize size = UIScreen.MainScreen.CurrentMode.Size;
+                if((Version == PhoneType.IPhone6 && size.Height == 1136) || (Version == PhoneType.IPhone6Plus && size.Height == 2001))
+                {
+                    width = (int)size.Width / (int)UIKit.UIScreen.MainScreen.Scale;
+                    height = (int)size.Height / (int)UIKit.UIScreen.MainScreen.Scale;
+                }
+                else
+                {
+                    CoreGraphics.CGRect bounds = UIKit.UIScreen.MainScreen.NativeBounds;
+                    width = (int)bounds.Width;
+                    height = (int)bounds.Height;
+                }
             }
             else
             {

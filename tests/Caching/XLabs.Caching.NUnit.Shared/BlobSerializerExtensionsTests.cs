@@ -12,7 +12,7 @@ namespace XLabs.Caching.SQLiteTests
 	[TestFixture]
 	public class BlobSerializerExtensionsTests
 	{
-		public class byteSerilizer:IByteSerializer
+		public class byteSerializer : IByteSerializer
 		{
 			#region IByteSerializer implementation
 			public byte[] SerializeToBytes<T> (T obj)
@@ -37,11 +37,11 @@ namespace XLabs.Caching.SQLiteTests
 		[Test]
 		public void BlobSerializerExtensionsAsBlobSerializerTest()
 		{
-			IBlobSerializer blobDelegate = BlobSerializerExtensions.AsBlobSerializer (new byteSerilizer ());
+			IBlobSerializer blobDelegate = BlobSerializerExtensions.AsBlobSerializer (new byteSerializer());
 			Assert.IsTrue (blobDelegate.CanDeserialize(typeof(string)));
 			byte[] myBytes = { 0xaa, 0xbb };
-			Assert.AreEqual ((new byteSerilizer ()).SerializeToBytes(myBytes), blobDelegate.Serialize<string>("nothing"));
-			Assert.AreEqual ((new byteSerilizer ()).Deserialize(myBytes,typeof(string)), blobDelegate.Deserialize(myBytes,typeof(string)));
+			Assert.AreEqual ((new byteSerializer()).SerializeToBytes(myBytes), blobDelegate.Serialize<string>("nothing"));
+			Assert.AreEqual ((new byteSerializer()).Deserialize(myBytes,typeof(string)), blobDelegate.Deserialize(myBytes,typeof(string)));
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace XLabs.Forms.Controls
     public class ImageButton : Button
     {
         /// <summary>
-        /// Backing field for the Image property.
+        /// Backing field for the Source property.
         /// </summary>
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(
             (Expression<Func<ImageButton, ImageSource>>)(w => w.Source), 
@@ -43,7 +43,7 @@ namespace XLabs.Forms.Controls
             (bindable, oldvalue, newvalue) => ((VisualElement)bindable).ToString());
 
         /// <summary>
-        /// Backing field for the Image property.
+        /// Backing field for the DisabledSource property.
         /// </summary>
         public static readonly BindableProperty DisabledSourceProperty = BindableProperty.Create(
             (Expression<Func<ImageButton, ImageSource>>)(w => w.DisabledSource),
@@ -101,10 +101,10 @@ namespace XLabs.Forms.Controls
         }
 
         /// <summary>
-        /// Gets or sets the ImageSource to use with the control.
+        /// Gets or sets the ImageSource to use with the control when the button is disabled.
         /// </summary>
         /// <value>
-        /// The Source property gets/sets the value of the backing field, SourceProperty.
+        /// The Source property gets/sets the value of the backing field, DisabledSourceProperty.
         /// </value>
         [TypeConverter(typeof(ImageSourceConverter))]
         public ImageSource DisabledSource
@@ -126,7 +126,7 @@ namespace XLabs.Forms.Controls
         }
 
         /// <summary>
-        /// Gets or sets the requested height of the image.  If less than or equal to zero than a 
+        /// Gets or sets the requested height of the image. If less than or equal to zero than a 
         /// height of 50 will be used.
         /// </summary>
         /// <value>
@@ -139,11 +139,11 @@ namespace XLabs.Forms.Controls
         }
 
         /// <summary>
-        /// Gets or sets the requested width of the image.  If less than or equal to zero than a 
+        /// Gets or sets the requested width of the image. If less than or equal to zero than a 
         /// width of 50 will be used.
         /// </summary>
         /// <value>
-        /// The ImageHeightRequest property gets/sets the value of the backing field, ImageHeightRequestProperty.
+        /// The ImageWidthRequest property gets/sets the value of the backing field, ImageWidthRequestProperty.
         /// </value> 
         public int ImageWidthRequest
         {

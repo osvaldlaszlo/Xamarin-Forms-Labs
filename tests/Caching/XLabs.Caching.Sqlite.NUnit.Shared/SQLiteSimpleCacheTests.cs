@@ -5,6 +5,7 @@ using SQLite.Net;
 using System.Collections.Generic;
 using SQLite.Net.Interop;
 using System.Linq;
+using System.Threading.Tasks;
 using SQLite.Net.Attributes;
 using XLabs.Caching.SQLiteTests.Mocks;
 
@@ -26,9 +27,8 @@ namespace XLabs.Caching.SQLiteTests
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
             Assert.IsInstanceOf<SQLiteSimpleCache>(cache);
             Assert.AreEqual (1, MockBase.CreateStatementsExecuted.Count);
-
-
         }
+
         [Test]
         public void SQLiteSimpleCacheRemoveTest ()
         {
@@ -115,7 +115,7 @@ namespace XLabs.Caching.SQLiteTests
         }
 //Async
         [Test]
-        public async void SQLiteSimpleCacheRemoveAsyncTest ()
+        public async Task SQLiteSimpleCacheRemoveAsyncTest ()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -124,7 +124,7 @@ namespace XLabs.Caching.SQLiteTests
 
         }
         [Test]
-        public async void SQLiteSimpleCacheRemoveAllAsyncTest ()
+        public async Task SQLiteSimpleCacheRemoveAllAsyncTest ()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -133,7 +133,7 @@ namespace XLabs.Caching.SQLiteTests
         }
 
         [Test]
-        public async void SQLiteSimpleCacheGet_T_AsyncTest ()
+        public async Task SQLiteSimpleCacheGet_T_AsyncTest ()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -143,7 +143,7 @@ namespace XLabs.Caching.SQLiteTests
             Assert.LessOrEqual(1, MockBase.SelectStatementsExecuted.Count);
         }
         [Test]
-        public async void SQLiteSimpleCacheAdd_T_AsyncTest ()
+        public async Task SQLiteSimpleCacheAdd_T_AsyncTest ()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -152,7 +152,7 @@ namespace XLabs.Caching.SQLiteTests
         }
 
         [Test]
-        public async void SQLiteSimpleCacheSet_T_AsyncTest()
+        public async Task SQLiteSimpleCacheSet_T_AsyncTest()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -160,7 +160,7 @@ namespace XLabs.Caching.SQLiteTests
             Assert.AreEqual (1, MockBase.InsertOrReplaceStatementsExecuted.Count);
         }
         [Test]
-        public async void SQLiteSimpleCacheReplace_T_AsyncTest()
+        public async Task SQLiteSimpleCacheReplace_T_AsyncTest()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -169,7 +169,7 @@ namespace XLabs.Caching.SQLiteTests
             Assert.AreEqual (1, MockBase.InsertStatementsExecuted.Count);
         }
         [Test]
-        public async void SQLiteSimpleCacheFlushAll_T_AsyncTest()
+        public async Task SQLiteSimpleCacheFlushAll_T_AsyncTest()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -177,7 +177,7 @@ namespace XLabs.Caching.SQLiteTests
             Assert.AreEqual (1, MockBase.DeleteStatementsExecuted.Count);
         }
         [Test]
-        public async void SQLiteSimpleCacheGetAll_T_AsyncTest()
+        public async Task SQLiteSimpleCacheGetAll_T_AsyncTest()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());
@@ -187,7 +187,7 @@ namespace XLabs.Caching.SQLiteTests
             Assert.LessOrEqual (1, MockBase.SelectStatementsExecuted.Count);
         }
         [Test]
-        public async void SQLiteSimpleCacheSetAllAsync_T_Test()
+        public async Task SQLiteSimpleCacheSetAllAsync_T_Test()
         {
             SQLiteConnectionString connstring = new SQLiteConnectionString("somepath",false,new Mocks.MockBlobSerializer());
             SQLiteSimpleCache cache = new SQLiteSimpleCache(new Mocks.MockSqlLiteProvider(),connstring,new Mocks.MockByteSerializer());

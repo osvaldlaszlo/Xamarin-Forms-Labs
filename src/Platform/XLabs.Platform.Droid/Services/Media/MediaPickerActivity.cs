@@ -560,11 +560,6 @@ namespace XLabs.Platform.Services.Media
         {
             var tcs = new TaskCompletionSource<Tuple<string, bool>>();
 
-            var fixedUri = FixUri(uri.Path);
-
-            if (fixedUri != null)
-                uri = fixedUri;
-
             if (uri.Scheme == "file")
                 tcs.SetResult(new Tuple<string, bool>(new System.Uri(uri.ToString()).LocalPath, false));
             else if (uri.Scheme == "content")

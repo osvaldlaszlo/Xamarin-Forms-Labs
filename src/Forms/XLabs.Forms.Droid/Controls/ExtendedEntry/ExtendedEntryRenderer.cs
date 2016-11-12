@@ -22,6 +22,8 @@
 using System;
 using System.ComponentModel;
 using Android.Graphics;
+using Android.Graphics.Drawables;
+using Android.Graphics.Drawables.Shapes;
 using Android.Text;
 using Android.Text.Method;
 using Android.Util;
@@ -43,6 +45,8 @@ namespace XLabs.Forms.Controls
         private const int MinDistance = 10;
 
         private float downX, downY, upX, upY;
+        
+        private Drawable originalBackground;
 
         /// <summary>
         /// Called when [element changed].
@@ -59,6 +63,9 @@ namespace XLabs.Forms.Controls
                 Control.SetTypeface(Typeface.Default, TypefaceStyle.Normal);
                 Control.TransformationMethod = new PasswordTransformationMethod();
             }
+            
+            if (originalBackground == null)
+                originalBackground = Control.Background;
 
             SetFont(view);
             SetTextAlignment(view);
@@ -180,10 +187,20 @@ namespace XLabs.Forms.Controls
         ///// Sets the border.
         ///// </summary>
         ///// <param name="view">The view.</param>
-        //private void SetBorder(ExtendedEntry view)
-        //{
-        //    //NotCurrentlySupported: HasBorder peroperty not suported on Android
-        //}
+        private void SetBorder(ExtendedEntry view)
+        {
+           if (view.HasBorder == false)
+           {
+                var shape = new ShapeDrawable(new RectShape());
+                shape.Paint.Alpha = 0;
+                shape.Paint.SetStyle(Paint.Style.Stroke);
+                Control.SetBackgroundDrawable(shape);
+           }
+           else 
+           {
+               Control.SetBackground (originalBackground);
+           }
+        }
 
         /// <summary>
         /// Sets the text alignment.

@@ -2,9 +2,12 @@
 
 public class SettingsUtils
 {
-	public static Settings LoadSettings(ICakeContext context, string settingsFile)
+	public static Settings LoadSettings(ICakeContext context)
 	{
+		var settingsFile = context.Argument<string>("settingsFile", ".\\settings.json");
+		
 		context.Information("Loading Settings: {0}", settingsFile);
+
 		if (!context.FileExists(settingsFile))
 		{
 			context.Error("Settings File Does Not Exist");
@@ -12,13 +15,84 @@ public class SettingsUtils
 		}
 		
 		var obj = context.DeserializeJsonFromFile<Settings>(settingsFile);
+
+		obj.SettingsFile = settingsFile;
+		
+		// Allow for any overrides
+		obj.Target = context.Argument<string>("target", obj.Target);
+		obj.Configuration = context.Argument<string>("configuration", obj.Configuration);
+		obj.VersionFile = context.Argument<string>("versionFile", obj.VersionFile);
+				
+		obj.ExecuteBuild 		= context.Argument<string>("build", obj.ExecuteBuild.ToString()).ToLower() == "true" 		|| context.Argument<string>("build", obj.ExecuteBuild.ToString()) == "1";
+		obj.ExecutePackage 		= context.Argument<string>("package", obj.ExecutePackage.ToString()).ToLower() == "true" 	|| context.Argument<string>("package", obj.ExecutePackage.ToString()) == "1";
+		obj.ExecuteUnitTest 	= context.Argument<string>("unitTest", obj.ExecuteUnitTest.ToString()).ToLower() == "true" 	|| context.Argument<string>("unitTest", obj.ExecuteUnitTest.ToString()) == "1";
+		obj.ExecuteClean 		= context.Argument<string>("clean", obj.ExecuteClean.ToString()).ToLower() == "true" 		|| context.Argument<string>("clean", obj.ExecuteClean.ToString()) == "1";
+
+		if (obj.NuGet == null) obj.NuGet = new NuGetSettings();
+		
+		obj.NuGet.FeedUrl		= context.Argument<string>("nugetFeed", obj.NuGet.FeedUrl);
+		obj.NuGet.FeedApiKey	= context.Argument<string>("nugetApiKey", obj.NuGet.FeedApiKey);
+		
+		obj.NuGet.LibraryMinVersionDependency 		= (context.Argument<string>("dependencyVersion", obj.NuGet.LibraryMinVersionDependency)).Replace(":",".");
+		obj.NuGet.VersionDependencyTypeForLibrary 	= context.Argument<VersionDependencyTypes>("dependencyType", obj.NuGet.VersionDependencyTypeForLibrary);
 		
 		return obj;
+	}
+	
+	public static void DisplayHelp(ICakeContext context)
+	{
+		var defaultValues = new Settings();
+		
+		context.Information("Command Line Help/Syntax:");
+		context.Information("\t.\\build.ps1 <Target>\t\t\t\t(Default: {0})", defaultValues.Target);
+		context.Information("\t\t-Configuration=<Configuration>\t\t(Default: {0})", defaultValues.Configuration);
+		context.Information("\t\t-settingsFile=<Settings File>\t\t(Default: {0})", defaultValues.SettingsFile);
+		context.Information("\t\t-versionFile=<Version File>\t\t(Default: {0})", defaultValues.VersionFile);
+		context.Information("\t\t-build=<0|1>\t\t\t\t(Default: {0})", defaultValues.ExecuteBuild);
+		context.Information("\t\t-package=<0|1>\t\t\t\t(Default: {0})", defaultValues.ExecutePackage);
+		context.Information("\t\t-unitTest=<0|1>\t\t\t\t(Default: {0})", defaultValues.ExecuteUnitTest);
+		context.Information("\t\t-clean=<0|1>\t\t\t\t(Default: {0})", defaultValues.ExecuteClean);
+		context.Information("\t\t-nugetFeed=<Nuget Feed URL>\t\t(Default: {0})", defaultValues.NuGet.FeedUrl);
+		context.Information("\t\t-nugetApiKey=<Nuget Feed API Key>\t(Default: {0})", defaultValues.NuGet.FeedApiKey);
+		context.Information("\t\t-dependencyVersion=<Version Number>\t(Default: {0})", defaultValues.NuGet.LibraryMinVersionDependency);
+		context.Information("\t\t-dependencyType=<none|exact|greaterthan|greaterthanorequal|lessthan>\t\t(Default: {0})", defaultValues.NuGet.VersionDependencyTypeForLibrary);
+		context.Information("");
+		context.Information("Examples:");
+		context.Information("\t.\\build Build -Configuration=Release");
+		context.Information("\t.\\build UnitTest -build=0");
 	}
 }
 
 public class Settings
 {
+	public Settings()
+	{
+		ExecuteBuild = true;
+		ExecutePackage = true;
+		ExecuteUnitTest = true;
+		ExecuteClean = true;
+		
+		Target = "DisplayHelp";
+		Configuration = "Release";
+		SettingsFile = ".\\settings.json";
+		VersionFile = ".\\version.json";
+		
+		Version = new VersionSettings();
+		Build = new BuildSettings();
+		Test = new TestSettings();
+		NuGet = new NuGetSettings();
+	}
+
+	public string Target {get;set;}
+	public string Configuration {get;set;}
+	public string SettingsFile {get;set;}
+	public string VersionFile {get;set;}
+	
+	public bool ExecuteBuild {get;set;}
+	public bool ExecutePackage {get;set;}
+	public bool ExecuteUnitTest {get;set;}
+	public bool ExecuteClean {get;set;}
+	
 	public VersionSettings Version {get;set;}
 	public BuildSettings Build {get;set;}
 	public TestSettings Test {get;set;}
@@ -27,6 +101,18 @@ public class Settings
 	public void Display(ICakeContext context)
 	{
 		context.Information("Settings:");
+
+		context.Information("\tTarget: {0}", Target);
+		context.Information("\tConfiguration: {0}", Configuration);
+		context.Information("\tSettings File: {0}", SettingsFile);
+		context.Information("\tVersion File: {0}", VersionFile);
+		
+		context.Information("\tExecute Build: {0}", ExecuteBuild);
+		context.Information("\tExecute Package: {0}", ExecutePackage);
+		context.Information("\tExecute UnitTests: {0}", ExecuteUnitTest);
+		context.Information("\tExecute Clean: {0}", ExecuteClean);
+		
+		
 		Version.Display(context);
 		Build.Display(context);
 		Test.Display(context);

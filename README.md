@@ -173,17 +173,6 @@ Do this before using the services
 ________________
 
 
-**Helper**
-======
-
-> Based in last developments (master)
-
-[Master- XLabs Framework Helper for online use](http://htmlpreview.github.io/?https://raw.githubusercontent.com/XLabs/Xamarin-Forms-Labs/master/Helper/master/Web/Index.html)
-
-[Master - Xamarin.Forms.Labs.chm file for offline use](https://github.com/XLabs/Xamarin-Forms-Labs/blob/master/Helper/master/Xamarin.Forms.Labs.chm)
-________________
-
-
 **Build the project**
 ======
 
